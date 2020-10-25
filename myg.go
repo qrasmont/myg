@@ -15,13 +15,13 @@ func commandeUsage() {
 
 func main() {
     // Define the command flags.
-    address := flag.String("a", "tcp://localhost", "mqtt broker address")
+    address := flag.String("a", "localhost", "mqtt broker address")
     port := flag.Int("p", 1883, "mqtt broker port")
 
     // Set a custom usage message.
     flag.Usage = commandeUsage
 
-    // Prase the flags.
+    // Parse the flags.
     flag.Parse()
 
     // Check we have at least one topic to subscribe to.
@@ -31,5 +31,7 @@ func main() {
         os.Exit(1)
     }
 
-    fmt.Printf("address: %s, port: %d\n", *address, *port)
+    setSubTopics(os.Args[1:]) // Slice to ignore our path
+    setMQTTConParam(*address, *port)
+    startMQTTClient()
 }
